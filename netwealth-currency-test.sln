@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31727.386
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "currency-api-backend", "currency-api-backend\currency-api-backend.csproj", "{93CCC92A-BB08-41F6-8CCD-8D9CAEFF4F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "currency-api-backend", "currency-api-backend\currency-api-backend.csproj", "{93CCC92A-BB08-41F6-8CCD-8D9CAEFF4F08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter", "CurrencyConverter\CurrencyConverter.csproj", "{9D7E7FB6-D9CF-4E56-BA5E-D5864AA45316}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{93CCC92A-BB08-41F6-8CCD-8D9CAEFF4F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93CCC92A-BB08-41F6-8CCD-8D9CAEFF4F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93CCC92A-BB08-41F6-8CCD-8D9CAEFF4F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D7E7FB6-D9CF-4E56-BA5E-D5864AA45316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D7E7FB6-D9CF-4E56-BA5E-D5864AA45316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D7E7FB6-D9CF-4E56-BA5E-D5864AA45316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D7E7FB6-D9CF-4E56-BA5E-D5864AA45316}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
