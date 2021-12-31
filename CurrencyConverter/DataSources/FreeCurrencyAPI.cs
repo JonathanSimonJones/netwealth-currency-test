@@ -136,6 +136,15 @@ namespace CurrencyConverter.DataSources
                 i++;
             }
 
+            // Add USD if missing
+            if(currencyDataPayload.CurrencyAndRate.Select(x => x.Id == "USD").FirstOrDefault() == false)
+            {
+                var updatedCurrencyAndRate = new List<FXRate>();
+                updatedCurrencyAndRate.AddRange(currencyDataPayload.CurrencyAndRate);
+                updatedCurrencyAndRate.Add(new FXRate() { Id = "USD", Number = 1 });
+                currencyDataPayload.CurrencyAndRate = updatedCurrencyAndRate.ToArray();
+            }
+
             return currencyDataPayload;
         }
 

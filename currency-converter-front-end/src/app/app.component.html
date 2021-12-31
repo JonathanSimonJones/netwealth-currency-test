@@ -3,9 +3,9 @@
     <span>Base currency: {{ payload.BaseCurrency }}</span>
   </div>
   <div>
-    <select [(ngModel)]="fromListCountry" (change)="checkOnChange()">
-      <option>Select Country</option>
-      <option *ngFor="let country of countries" [ngValue]="country.id">{{country.name}}</option>
+    <select [(ngModel)]="fromCountry" (change)="onFromCountryChange()">
+      <option disabled>Select Country</option>
+      <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
     </select>
   </div>
   <div>
@@ -13,18 +13,24 @@
   </div>
   <div>
     <div>
-      <span>Second country, select is {{ secondListCountry }}</span>
+      <span>Second country, select is {{ toCountry }}</span>
     </div>
     <div>
-      <select [(ngModel)]="secondListCountry" (change)="toCountryChange()">
-        <option>Select Country</option>
-        <option *ngFor="let country of countries" [ngValue]="country.id">{{country.name}}</option>
+      <select [(ngModel)]="toCountry" (change)="onToCountryChange()">
+        <option disabled>Select Country</option>
+        <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
       </select>
     </div>
     <div>
       <input [(ngModel)]="toCountryNumVal" id="toConvertCurrency" type="text">
     </div>
   </div>  
+  <div>
+    <span>To rate: {{toCountryTransferRate}}</span>
+  </div>
+  <div>
+    <span>Date of currency data: {{payload.DateAndTimeFromExternalAPI | date :'long' }}</span>
+  </div>
   <div>
     <span>{{errorMessage}}</span>
   </div>
