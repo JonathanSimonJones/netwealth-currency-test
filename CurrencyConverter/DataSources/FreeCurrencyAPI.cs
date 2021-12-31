@@ -36,7 +36,7 @@ namespace CurrencyConverter.DataSources
             currencyEndpoint = endpoint + "latest" + accessKey;
         }
 
-        public async Task<Dictionary<string, double>> GetAllCurrencies()
+        public async Task<FXRate[]> GetAllCurrencies()
         {
             // Construct message
             var httpRequestMessage = new HttpRequestMessage(
@@ -48,6 +48,10 @@ namespace CurrencyConverter.DataSources
             {
                 // Get message details
                 var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+                //httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
+                //httpResponseMessage.Headers.Add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+                //httpResponseMessage.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
 
                 // Check for success
                 if (httpResponseMessage.IsSuccessStatusCode)
@@ -84,6 +88,10 @@ namespace CurrencyConverter.DataSources
                 // Get message details
                 var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
+                //httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
+                //httpResponseMessage.Headers.Add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+                //httpResponseMessage.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+
                 // Check for success
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -119,11 +127,13 @@ namespace CurrencyConverter.DataSources
             currencyDataPayload.DateAndTimeFromExternalAPI = UnixTimeStampToDateTime(dataFromAPI.query.timestamp);
             currencyDataPayload.DateAndTimeOfQuery = DateTime.Now;
             currencyDataPayload.BaseCurrency = dataFromAPI.query.base_currency;
-            currencyDataPayload.CurrencyAndRate = new Dictionary<string, double>();
+            currencyDataPayload.CurrencyAndRate = new FXRate[dataFromAPI.data.Count];
 
+            var i = 0;
             foreach(var currency in dataFromAPI.data)
             {
-                currencyDataPayload.CurrencyAndRate.Add(currency.Key, currency.Value);
+                currencyDataPayload.CurrencyAndRate[i] = new FXRate() { Id = currency.Key, Number = Convert.ToDouble(currency.Value)};
+                i++;
             }
 
             return currencyDataPayload;
@@ -143,7 +153,7 @@ namespace CurrencyConverter.DataSources
             foreach (var currency in currencies)
             {
                 // Check the currency can be converted 
-                if(currency.Key == baseCurrency)
+                if(currency.Id == baseCurrency)
                 {
                     // Construct message
                     var httpRequestMessage = new HttpRequestMessage(
@@ -155,6 +165,10 @@ namespace CurrencyConverter.DataSources
                     {
                         // Get message details
                         var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+                        //httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
+                        //httpResponseMessage.Headers.Add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+                        //httpResponseMessage.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
 
                         // Check for success
                         if (httpResponseMessage.IsSuccessStatusCode)

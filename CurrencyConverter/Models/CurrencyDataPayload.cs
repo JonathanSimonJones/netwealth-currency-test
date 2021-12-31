@@ -9,6 +9,13 @@ namespace CurrencyConverter.Models
         public DateTime DateAndTimeFromExternalAPI { get; set; }
         public DateTime DateAndTimeOfQuery { get; set; }
         public string BaseCurrency { get; set; }
-        public Dictionary<string, double> CurrencyAndRate {get;set;}
+        public FXRate[] CurrencyAndRate {get;set;}
+    }
+
+    public class FXRate
+    {
+        public string Id { get; set; }
+
+        public double Number { get; set; }
     }
 }
