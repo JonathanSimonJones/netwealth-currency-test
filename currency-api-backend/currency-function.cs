@@ -19,7 +19,7 @@ namespace currency_api_backend
     {
         [FunctionName("Currency")]
         public static async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             if(req.Query.Count == 0)
