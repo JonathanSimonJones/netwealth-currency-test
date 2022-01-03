@@ -19,7 +19,7 @@ namespace currency_api_backend
     {
         [FunctionName("Currency")]
         public static async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             if(req.Query.Count == 0)
@@ -35,13 +35,13 @@ namespace currency_api_backend
                     log.LogInformation($"Could not get currency data. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
                 }
 
-                return UnableToProcessRequest();
+                return ServiceUnavailable();
             }
             else
             {
                 var currencyConverterService = new CurrencyConverter.CurrencyConverterService();
 
-                if (string.IsNullOrEmpty(req.Query["base"]) != true && 
+                if (string.IsNullOrEmpty(req.Query["base"]) != true &&
                     string.IsNullOrEmpty(req.Query["desired"]) != true &&
                     string.IsNullOrEmpty(req.Query["amount"]) != true)
                 {
@@ -49,12 +49,12 @@ namespace currency_api_backend
                     {
                         return await currencyConverterService.ConvertValue(req.Query["base"], req.Query["desired"], req.Query["amount"]);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
-                        log.LogInformation($"Could not convert value. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
+                        log.LogInformation($"Could not convert amount. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
                     }
                 }
-                else if(string.IsNullOrEmpty(req.Query["base"]) != true)
+                else
                 {
                     try
                     {
@@ -66,11 +66,11 @@ namespace currency_api_backend
                     }
                 }
 
-                return UnableToProcessRequest();
+                return ServiceUnavailable();
             }
         }
 
-        private static HttpResponseMessage UnableToProcessRequest()
+        private static HttpResponseMessage ServiceUnavailable()
         {
             var myObj = new { response = "Could not process request" };
             var jsonToReturn = System.Text.Json.JsonSerializer.Serialize(myObj);
