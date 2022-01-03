@@ -12,14 +12,14 @@ namespace CurrencyConverter.DataSources
 {
     public class FreeCurrencyAPI
     {
-        private class FreeCurrencyQuery
+        public class FreeCurrencyQuery
         {
             public string apikey { get; set; }
             public int timestamp { get; set; }
             public string base_currency { get; set; }
         }
 
-        private class FreeCurrencyRoot
+        public class FreeCurrencyRoot
         {
             public FreeCurrencyQuery query { get; set; }
             public Dictionary<string, double> data { get; set; }
@@ -48,10 +48,6 @@ namespace CurrencyConverter.DataSources
             {
                 // Get message details
                 var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-                //httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
-                //httpResponseMessage.Headers.Add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-                //httpResponseMessage.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
 
                 // Check for success
                 if (httpResponseMessage.IsSuccessStatusCode)
@@ -87,10 +83,6 @@ namespace CurrencyConverter.DataSources
             {
                 // Get message details
                 var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-                //httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
-                //httpResponseMessage.Headers.Add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-                //httpResponseMessage.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
 
                 // Check for success
                 if (httpResponseMessage.IsSuccessStatusCode)
@@ -175,10 +167,6 @@ namespace CurrencyConverter.DataSources
                         // Get message details
                         var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
-                        //httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
-                        //httpResponseMessage.Headers.Add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-                        //httpResponseMessage.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
-
                         // Check for success
                         if (httpResponseMessage.IsSuccessStatusCode)
                         {
@@ -214,8 +202,47 @@ namespace CurrencyConverter.DataSources
             {
                 Content = new StringContent(jsonToReturn, Encoding.UTF8, "application/json")
             };
+        }
 
-            throw new NotImplementedException();
+        public async Task<FreeCurrencyRoot> GetCurrencyExchangeRatesAsObject(string baseCurrency)
+        {
+            var currencies = await GetAllCurrencies();
+            foreach (var currency in currencies)
+            {
+                // Check the currency can be converted 
+                if (currency.Id == baseCurrency)
+                {
+                    // Construct message
+                    var httpRequestMessage = new HttpRequestMessage(
+                                                    HttpMethod.Get,
+                                                    currencyEndpoint + "&base_currency=" + baseCurrency)
+                    { };
+
+                    try
+                    {
+                        // Get message details
+                        var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+                        // Check for success
+                        if (httpResponseMessage.IsSuccessStatusCode)
+                        {
+                            var contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+
+                            return await System.Text.Json.JsonSerializer.DeserializeAsync<FreeCurrencyRoot>(contentStream);
+                        }
+                        else
+                        {
+                            throw new HttpRequestException($"The {apiName} request did not return a success status code");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception($"Something went wrong when requesting the data from {apiName}. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
+                    }
+                }
+            }
+
+            throw new Exception("Could not find currency");
         }
     }
 }

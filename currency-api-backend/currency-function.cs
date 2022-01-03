@@ -19,7 +19,7 @@ namespace currency_api_backend
     {
         [FunctionName("Currency")]
         public static async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             if(req.Query.Count == 0)
@@ -35,26 +35,42 @@ namespace currency_api_backend
                     log.LogInformation($"Could not get currency data. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
                 }
 
-                return ServiceUnavailable();
+                return UnableToProcessRequest();
             }
             else
             {
                 var currencyConverterService = new CurrencyConverter.CurrencyConverterService();
 
-                try
+                if (string.IsNullOrEmpty(req.Query["base"]) != true && 
+                    string.IsNullOrEmpty(req.Query["desired"]) != true &&
+                    string.IsNullOrEmpty(req.Query["amount"]) != true)
                 {
-                    return await currencyConverterService.GetExchangeRatesForCurrency(req.Query["base"]);
+                    try
+                    {
+                        return await currencyConverterService.ConvertValue(req.Query["base"], req.Query["desired"], req.Query["amount"]);
+                    }
+                    catch(Exception e)
+                    {
+                        log.LogInformation($"Could not convert value. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
+                    }
                 }
-                catch (Exception e)
+                else if(string.IsNullOrEmpty(req.Query["base"]) != true)
                 {
-                    log.LogInformation($"Could not get currency data. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
+                    try
+                    {
+                        return await currencyConverterService.GetExchangeRatesForCurrency(req.Query["base"]);
+                    }
+                    catch (Exception e)
+                    {
+                        log.LogInformation($"Could not get currency data. Inner: {e.InnerException}. Message: {e.Message}. Stack trace: {e.StackTrace}");
+                    }
                 }
 
-                return ServiceUnavailable();
+                return UnableToProcessRequest();
             }
         }
 
-        private static HttpResponseMessage ServiceUnavailable()
+        private static HttpResponseMessage UnableToProcessRequest()
         {
             var myObj = new { response = "Could not process request" };
             var jsonToReturn = System.Text.Json.JsonSerializer.Serialize(myObj);

@@ -1,39 +1,49 @@
 <div class="content" role="main">
-  <div>
-    <span>Base currency: {{ payload.BaseCurrency }}</span>
-  </div>
-  <div>
-    <select [(ngModel)]="fromCountry" (change)="onFromCountryChange()">
-      <option disabled>Select Country</option>
-      <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
-    </select>
-  </div>
-  <div>
-      <input [(ngModel)]="fromCountryNumVal" id="base-currency" type="text" (input)="baseCurrenyValChange()">
-  </div>
-  <div>
+  <header>
     <div>
-      <span>Second country, select is {{ toCountry }}</span>
+      <h1>{{title}}</h1>
     </div>
-    <div>
-      <select [(ngModel)]="toCountry" (change)="onToCountryChange()">
-        <option disabled>Select Country</option>
-        <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
-      </select>
+  </header>
+  <div id="core">
+    <div id="instructions">
+      <span>Converts a value in one currency to another. Please select the initial currency code from the dropdown. Then enter an amount in that currency in the space provided next to your selection. Then select the desired currency code.</span>
     </div>
-    <div>
-      <input [(ngModel)]="toCountryNumVal" id="toConvertCurrency" type="text">
+    <div id="error-message">
+      <span>{{errorMessage}}</span>
     </div>
-  </div>  
-  <div>
-    <span>To rate: {{toCountryTransferRate}}</span>
+    <div id="initial-currency-holder" class="currency-holder">
+      <div>
+        <span>Initial country currency code: </span>
+        <select [(ngModel)]="fromCountry" (change)="onFromCountryChange()">
+          <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
+        </select>
+      </div>
+      <div>
+        <span>{{fromCurrencySymbol}}</span>
+        <input [(ngModel)]="fromCountryNumVal" id="base-currency" type="text" (input)="baseCurrenyValInput()">
+      </div>
+    </div>
+    <div id="transfer-rate">
+      <span>Transfer rate: {{toCountryTransferRate}}</span>
+    </div>
+    <div id="desired-currency-holder" class="currency-holder">
+      <div>
+        <span>Desired currency country code: </span>
+        <select [(ngModel)]="toCountry" (change)="onToCountryChange()">
+          <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
+        </select>
+      </div>
+      <div>
+        <span>{{toCurrencySymbol}}</span>
+        <input disabled [(ngModel)]="toCountryNumVal" id="toConvertCurrency" type="text">
+      </div>
+    </div>
   </div>
-  <div>
-    <span>Date of currency data: {{payload.DateAndTimeFromExternalAPI | date :'long' }}</span>
-  </div>
-  <div>
-    <span>{{errorMessage}}</span>
-  </div>
+  <footer>
+      <span id="dateTime">Date of currency data: {{currencyConverterAPIData.DateAndTimeFromExternalAPI | date :'long' }}</span>
+      <span id="source">Values are provided as an estimate. Data sourced from <a href="https://freecurrencyapi.net/">Free Currency API</a></span>
+      <span id="developer">Developed by <a href="https://www.linkedin.com/in/jonathan-simon-jones-1594744a/?originalSubdomain=uk">Jonathan Simon Jones</a></span>
+  </footer>
 </div>
 
 <router-outlet></router-outlet>

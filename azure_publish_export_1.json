@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appService_currency-api-backend20220101125840_name": {
+      "type": "string"
+    },
+    "currencyapibackend202201StorageAccount": {
+      "type": "String"
+    },
+    "storageaccount_currencyapibackend202201": {
+      "type": "string"
+    },
+    "currencyapibackend202201StorageAccount_location": {
+      "type": "String"
+    },
+    "currencyapibackend202201StorageAccountType": {
+      "type": "String"
+    }
+  },
+  "resources": [
+    {
+      "location": "UK South",
+      "name": "[parameters('appService_currency-api-backend20220101125840_name')]",
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-02-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('currencyapibackend202201StorageAccount'))]"
+      ],
+      "kind": "functionapp",
+      "properties": {
+        "name": "[parameters('appService_currency-api-backend20220101125840_name')]",
+        "httpsOnly": true,
+        "reserved": true,
+        "siteConfig": {
+          "linuxFxVersion": "DOTNET|3.1"
+        }
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "resources": [
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2018-02-01",
+          "dependsOn": [
+            "[concat('Microsoft.Web/Sites/', parameters('appService_currency-api-backend20220101125840_name'))]"
+          ],
+          "properties": {
+            "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageaccount_currencyapibackend202201'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount_currencyapibackend202201')), '2017-10-01').keys[0].value, ';EndpointSuffix=', 'core.windows.net')]",
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageaccount_currencyapibackend202201'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount_currencyapibackend202201')), '2017-10-01').keys[0].value, ';EndpointSuffix=', 'core.windows.net')]",
+            "FUNCTIONS_EXTENSION_VERSION": "~3",
+            "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+          }
+        }
+      ]
+    },
+    {
+      "location": "[parameters('currencyapibackend202201StorageAccount_location')]",
+      "name": "[parameters('currencyapibackend202201StorageAccount')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2017-10-01",
+      "tags": {
+        "[concat('hidden-related:', concat('/providers/Microsoft.Web/sites/', parameters('appService_currency-api-backend20220101125840_name')))]": "empty"
+      },
+      "properties": {
+        "supportsHttpsTrafficOnly": true
+      },
+      "sku": {
+        "name": "[parameters('currencyapibackend202201StorageAccountType')]"
+      },
+      "kind": "Storage"
+    }
+  ]
+}

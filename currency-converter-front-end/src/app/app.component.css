@@ -1,0 +1,72 @@
+header {
+  background-color: black;
+  margin: auto;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+h1 {
+  font-size: large;
+  color: white;
+  text-align: center;
+}
+
+#core {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+}
+
+#instructions {
+  margin-bottom: 10px;
+}
+
+#error-message {
+  height: 25px;
+  color: red;
+}
+
+.currency-holder {
+  padding: 10px;
+}
+
+/* #transfer-rate {
+} */
+
+footer {
+  background: black;
+  position : absolute;
+  bottom : 0;
+  margin-top : 40px;
+  width: 100%;
+}
+
+footer span {
+  display: inline-block;
+  color:white;
+  width: 33%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#dateTime {
+  text-align: left;
+}
+
+#source {
+  text-align: center;
+}
+
+#developer {
+  text-align: right;
+}
+
+a {
+  color: lightblue;
+}
+
+a:visited {
+  color: greenyellow;
+}
