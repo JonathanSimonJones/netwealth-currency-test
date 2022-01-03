@@ -3,14 +3,14 @@
 This is an Angular project. It's primary purpose is to take the data provided by currency-api-backend and CurrencyConverter projects and transform it into a web based format.
 
 ## Details
-Angular CLI: 13.1.2
-Node: 16.13.1
-Package Manager: npm 8.1.2
-OS: win32 x64
+- Angular CLI: 13.1.2
+- Node: 16.13.1
+- Package Manager: npm 8.1.2
+- OS: win32 x64
 
 Angular: 13.1.1
-... animations, common, compiler, compiler-cli, core, forms
-... platform-browser, platform-browser-dynamic, router
+- ... animations, common, compiler, compiler-cli, core, forms
+- ... platform-browser, platform-browser-dynamic, router
 
 
 ------------------------------------------------------
