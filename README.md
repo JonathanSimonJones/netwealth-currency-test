@@ -13,3 +13,20 @@ This is a .NetCore library project. It's primary purpose is to provide functiona
 
 ### currency-converter-front-end
 This is an Angular project. It's primary purpose is to take the data provided by currency-api-backend and CurrencyConverter projects and transform it into a web based format. 
+
+-----------------------------------------
+## Building and running
+
+### Requirements
+- Visual Studio with Azure and .Net Core development packages
+- VS Code with Angular development packages
+- *See individual projects for further dependicies*
+
+### Steps
+1. Clone netwealth-currency-test 
+2. Open netwealth-currency-test.sln (found in the root of the project) in Visual Studio
+3. Build and Run CurrencyConverter and currency-api-backend projects
+
+4. Open VS Code 
+5. Choose to work from folder currency-converter-front-end
+6. Run as an angular project
